@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const myPluginTwo = require('./myPlugin.js')
  // const Hapi = require('hapi');
 
 var fs = require("fs")  
@@ -73,6 +74,12 @@ const initHapi = async () => {
 	// await keyword makes the function pause the execution and wait for a resolved promise before it continues:
     await server.start();
     console.log('Server running on %s', server.info.uri);
+    
+    
+    
+    await server.register(myPluginOne);
+    await server.register(myPluginTwo);
+    
 };
 
 // if we get unwanted exception
@@ -82,8 +89,8 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-const myPlugin = {
-    name: 'myPlugin',
+const myPluginOne = {
+    name: 'myPluginOne',
     version: '1.0.0',
     register: async function (server, options) {
 
@@ -91,10 +98,10 @@ const myPlugin = {
 
         server.route({
             method: 'GET',
-            path: '/test',
+            path: '/pluginOne',
             handler: function (request, h) {
 
-                return 'hello, world plugin';
+                return 'hello, world myPluginOne';
             }
         });
 
